@@ -41,7 +41,7 @@ gallery.addEventListener('click', e => {
     
     gallery.addEventListener('keydown', e => {
 		if (e.key === 'Escape') {
-			instance.close(`<img src="${selectedImage}" width="800" height="600">`)
+			instance.close()
 		}
 	})
 })
