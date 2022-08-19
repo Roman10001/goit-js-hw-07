@@ -23,7 +23,10 @@ galleryItems.forEach(element => {
 	items.push(galleryItem)
 })
 
-gallery.append(...items)
+    gallery.append(...items)
+
+const instance = basicLightbox.create(`<img src="${selectedImage}" width="800" height="600">`)
+      instance.show()
 
 gallery.addEventListener('click', e => {
     e.preventDefault();
@@ -33,13 +36,12 @@ gallery.addEventListener('click', e => {
 
     const selectedImage = e.target.getAttribute('data-source')
 
-    const instance = basicLightbox.create(`<img src="${selectedImage}" width="800" height="600">`)
-
-    instance.show()
+    
+   
     
     gallery.addEventListener('keydown', e => {
 		if (e.key === 'Escape') {
-			instance.close()
+			instance.close(`<img src="${selectedImage}" width="800" height="600">`)
 		}
 	})
 })
