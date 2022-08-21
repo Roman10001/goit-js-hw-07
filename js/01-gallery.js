@@ -1,47 +1,48 @@
-import { galleryItems } from './gallery-items.js'
-
-console.log(galleryItems)
+import { galleryItems } from "./gallery-items.js";
 // Change code below this line
 
-const gallery = document.querySelector('.gallery')
-const items = []
+const galleryRef = document.querySelector(".gallery");
 
-galleryItems.forEach(element => {
-	const galleryItem = document.createElement('div')
-	galleryItem.className = 'gallery__item'
-	const galleryLink = document.createElement('a')
-	galleryLink.className = 'gallery__link'
-	galleryLink.href = element.original
-	const galleryImage = document.createElement('img')
-    galleryImage.className = 'gallery__image'
-    galleryImage.src = element.preview;
-    galleryImage.setAttribute('data-source', element.original)
-    galleryImage.alt = element.description;
+const markup = galleryItems
+    .map(({ preview, original, description }) => {
+        return `<div class="gallery__item">
+                <a class="gallery__link" href="large-image.jpg">
+                <img
+                    class="gallery__image"
+                    src="${preview}"
+                    data-source="${original}"
+                    alt="${description}"
+                />
+                </a>
+            </div>`;
+    })
+    .join("");
 
-	galleryItem.append(galleryLink)
-	galleryLink.append(galleryImage)
-	items.push(galleryItem)
-})
+galleryRef.insertAdjacentHTML("afterbegin", markup);
 
-    gallery.append(...items)
+let instance = basicLightbox.create(`<img src=''/>`);
 
-const instance = basicLightbox.create(`<img src="${selectedImage}" width="800" height="600">`)
-      instance.show()
-
-gallery.addEventListener('click', e => {
+function openModal(e) {
     e.preventDefault();
-    if (e.target.nodeName !== 'IMG') {
-		return
-	}
 
-    const selectedImage = e.target.getAttribute('data-source')
+    if (e.target.tagName !== "IMG") {
+        return;
+    }
 
-    
-   
-    
-    gallery.addEventListener('keydown', e => {
-		if (e.key === 'Escape') {
-			instance.close()
-		}
-	})
-})
+    window.addEventListener("keydown", closeModal);
+
+    const dataSet = e.target.dataset.source;
+
+    instance.element().querySelector("img").src = dataSet;
+
+    instance.show();
+}
+
+function closeModal(e) {
+    if (e.key === "Escape") {
+        window.removeEventListener("keydown", closeModal);
+        instance.close();
+    }
+}
+
+galleryRef.addEventListener("click", openModal);
